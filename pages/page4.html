@@ -1,0 +1,257 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Четвертая фотка</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.0/font/bootstrap-icons.css">
+    <style>
+        body {
+            background: linear-gradient(135deg, #f3e5f5 0%, #e1bee7 100%);
+            min-height: 100vh;
+            padding: 20px 0;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+        
+        .photo-container {
+            background: white;
+            border-radius: 20px;
+            padding: 40px;
+            box-shadow: 0 15px 35px rgba(156, 39, 176, 0.15);
+            max-width: 1000px;
+            margin: 0 auto;
+            border-top: 8px solid #9C27B0;
+        }
+        
+        .photo-frame {
+            position: relative;
+            margin-bottom: 40px;
+            border-radius: 15px;
+            overflow: hidden;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.2);
+            background: #f5f5f5;
+            min-height: 300px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+        
+        .photo-frame img {
+            width: 100%;
+            height: auto;
+            max-height: 600px;
+            object-fit: contain;
+            transition: transform 0.5s ease;
+        }
+        
+        .photo-frame img:hover {
+            transform: scale(1.02);
+        }
+        
+        .photo-number {
+            position: absolute;
+            top: 15px;
+            left: 15px;
+            background: rgba(156, 39, 176, 0.9);
+            color: white;
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: bold;
+            font-size: 1.2rem;
+        }
+        
+        .photo-description {
+            font-size: 1.2rem;
+            line-height: 1.8;
+            color: #333;
+            margin-top: 30px;
+        }
+        
+        .back-btn {
+            background: linear-gradient(135deg, #9C27B0 0%, #7B1FA2 100%);
+            color: white;
+            border: none;
+            padding: 12px 30px;
+            border-radius: 10px;
+            font-size: 1.1rem;
+            display: inline-flex;
+            align-items: center;
+            gap: 10px;
+            transition: all 0.3s;
+        }
+        
+        .back-btn:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 10px 20px rgba(156, 39, 176, 0.3);
+        }
+        
+        .question-box {
+            background: #F3E5F5;
+            border-radius: 15px;
+            padding: 25px;
+            margin-top: 30px;
+            border-left: 5px solid #9C27B0;
+        }
+        
+        .answer-btn {
+            transition: all 0.3s;
+        }
+        
+        .answer-btn:hover {
+            transform: translateY(-2px);
+        }
+        
+        @media (max-width: 768px) {
+            .photo-container {
+                padding: 20px;
+                margin: 10px;
+            }
+        }
+        
+        .loading-placeholder {
+            font-size: 3rem;
+            color: #ce93d8;
+            padding: 50px;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="photo-container">
+            <div class="photo-frame">
+                <!-- ВСТАВКА ФОТОГРАФИИ -->
+                <img src="../images/photo4.jpg" alt="Четвертая фотка" 
+                     onerror="this.style.display='none'; this.parentElement.innerHTML='<div class=\'loading-placeholder\'><i class=\'bi bi-image-fill\'></i><p class=\'mt-3\'>Фото не загрузилось</p></div>';">
+            </div>
+            
+            <h1 class="text-center mb-4" style="color: #7b1fa2;">
+                Мое восхищение по поводу четвертой фотки
+            </h1>
+            
+            <div class="photo-description">
+                <p class="lead">
+                    ну я самая красивая, что еще сказать по этому поводу... слово милая ты почему то не воспринимаешь, хотя оно равнозначно!! 
+                </p>
+                
+                <p>
+                    всех хороших слов тебе желать хочется
+                </p>
+                
+                <p>
+                    четвертая фотография показывает тебя с самой загадочной стороны...в ней чувствуется и красота и милота
+                   и нежность, и тепло, и какая-то внутренняя тайна... она как книга, 
+                    которую хочется читать бесконечно 
+                </p>
+                
+                <div class="question-box">
+                    <h4><i class="bi bi-key-fill me-2"></i>вопрос для доступа к дополнительному секрету...</h4>
+                    <p class="fs-5 mb-3">какая моя феворит фотография из мехового поста???</p>
+                    
+                    <div class="row g-2">
+                        <div class="col-md-3 col-6">
+                            <button class="btn btn-outline-primary w-100 answer-btn" data-answer="blue">Первая</button>
+                        </div>
+                        <div class="col-md-3 col-6">
+                            <button class="btn btn-outline-danger w-100 answer-btn" data-answer="red">Вторая</button>
+                        </div>
+                        <div class="col-md-3 col-6">
+                            <button class="btn btn-outline-success w-100 answer-btn" data-answer="green">Третья</button>
+                        </div>
+                        <div class="col-md-3 col-6">
+                            <button class="btn btn-outline-warning w-100 answer-btn" data-answer="yellow">Четвертая</button>
+                        </div>
+                    </div>
+                    
+                    <div class="alert alert-danger mt-3" id="wrongAnswer" style="display: none;">
+                        <i class="bi bi-x-circle-fill me-2"></i>попробуй другой ответ
+                    </div>
+                </div>
+                
+                <!-- Секретная секция -->
+                <div id="secretSection" style="display: none; animation: fadeIn 1s ease;" class="mt-4">
+                    <div class="alert alert-success">
+                        <h5><i class="bi bi-check-circle-fill me-2"></i>ура победа</h5>
+                        <p class="mb-0 mt-2">открыть секретную страницу теперь нужно:</p>
+                    </div>
+                    
+                    <div class="text-center mt-3">
+                        <a href="page5.html" class="btn btn-warning btn-lg">
+                            тыктык
+                        </a>
+                    </div>
+                </div>
+                
+                <p class="fst-italic text-muted mt-4">
+                    <i class="bi bi-quote me-2"></i>
+                    самые красивые фотографии — те, на которых есть ты ксюша
+                </p>
+            </div>
+            
+            <div class="text-center mt-4">
+                <a href="../second.html" class="btn back-btn">
+                    <i class="bi bi-arrow-left-circle"></i>
+                    Вернуться к выбору фоток
+                </a>
+            </div>
+        </div>
+    </div>
+    
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            // Анимация загрузки изображения
+            const img = document.querySelector('.photo-frame img');
+            if (img) {
+                img.style.opacity = '0';
+                img.style.transition = 'opacity 0.8s ease';
+                
+                img.onload = function() {
+                    this.style.opacity = '1';
+                };
+                
+                if (img.complete) {
+                    img.style.opacity = '1';
+                }
+            }
+            
+            // Логика для пасхалки
+            const answerButtons = document.querySelectorAll('.answer-btn');
+            const wrongAnswerAlert = document.getElementById('wrongAnswer');
+            const secretSection = document.getElementById('secretSection');
+            
+            answerButtons.forEach(button => {
+                button.addEventListener('click', function() {
+                    const answer = this.getAttribute('data-answer');
+                    
+                    if (answer === 'blue') {
+                        // Правильный ответ
+                        secretSection.style.display = 'block';
+                        wrongAnswerAlert.style.display = 'none';
+                        
+                        // Плавная прокрутка
+                        secretSection.scrollIntoView({ behavior: 'smooth' });
+                        
+                        // Звук успеха
+                        const successSound = new Audio('https://assets.mixkit.co/sfx/preview/mixkit-correct-answer-tone-2870.mp3');
+                        successSound.volume = 0.3;
+                        successSound.play().catch(e => console.log("Звук заблокирован"));
+                    } else {
+                        // Неправильный ответ
+                        wrongAnswerAlert.style.display = 'block';
+                        this.classList.add('btn-danger');
+                        setTimeout(() => {
+                            this.classList.remove('btn-danger');
+                        }, 500);
+                    }
+                });
+            });
+        });
+    </script>
+</body>
+</html>

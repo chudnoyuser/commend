@@ -1,0 +1,416 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Для тебя</title>
+    
+    <!-- Bootstrap 5 CSS -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    
+    <!-- Иконки Bootstrap -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.0/font/bootstrap-icons.css">
+    
+    <style>
+        body {
+            background: linear-gradient(135deg, #0c2461 0%, #1e3799 100%);
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            margin: 0;
+            padding: 20px;
+            overflow: hidden;
+            position: relative;
+        }
+        
+        .stars {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            pointer-events: none;
+            z-index: -1;
+        }
+        
+        .star {
+            position: absolute;
+            background-color: white;
+            border-radius: 50%;
+            animation: twinkle var(--duration) infinite var(--delay);
+        }
+        
+        @keyframes twinkle {
+            0%, 100% { opacity: 0.2; }
+            50% { opacity: 1; }
+        }
+        
+        .magic-btn {
+            position: absolute;
+            transition: all 0.4s cubic-bezier(0.68, -0.55, 0.27, 1.55);
+            padding: 25px 50px;
+            font-size: 2rem;
+            border-radius: 20px;
+            box-shadow: 0 15px 35px rgba(0, 0, 0, 0.3);
+            border: none;
+            font-weight: bold;
+            color: white;
+            z-index: 10;
+            cursor: pointer;
+            transform-origin: center;
+            text-transform: uppercase;
+            letter-spacing: 2px;
+        }
+        
+        .magic-btn:hover {
+            transform: scale(1.05);
+        }
+        
+        .title-text {
+            color: white;
+            text-align: center;
+            font-size: 2.5rem;
+            margin-bottom: 50px;
+            text-shadow: 0 2px 10px rgba(0, 0, 0, 0.3);
+            opacity: 0.9;
+            font-weight: 300;
+            padding: 0 20px;
+        }
+        
+        #backgroundMusic {
+            display: none;
+        }
+        
+        .music-control {
+            position: fixed;
+            bottom: 25px;
+            left: 25px;
+            z-index: 1000;
+            background: rgba(255, 255, 255, 0.1);
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            color: white;
+            border-radius: 50%;
+            width: 60px;
+            height: 60px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: all 0.3s;
+        }
+        
+        .music-control:hover {
+            background: rgba(255, 255, 255, 0.2);
+            transform: scale(1.1);
+        }
+        
+        .container-center {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            min-height: 80vh;
+        }
+        
+        .hint {
+            color: rgba(255, 255, 255, 0.4);
+            position: fixed;
+            bottom: 100px;
+            text-align: center;
+            font-size: 0.9rem;
+            width: 100%;
+        }
+        
+        /* Эффект для финальной кнопки */
+        @keyframes pulse-gold {
+            0%, 100% { 
+                box-shadow: 0 0 30px rgba(255, 215, 0, 0.5);
+                transform: scale(1);
+            }
+            50% { 
+                box-shadow: 0 0 60px rgba(255, 215, 0, 0.8);
+                transform: scale(1.05);
+            }
+        }
+        
+        .pulse-gold {
+            animation: pulse-gold 1.5s infinite;
+        }
+        
+        /* Минимальные частицы для фидбека кликов */
+        .click-particle {
+            position: absolute;
+            width: 6px;
+            height: 6px;
+            background-color: rgba(255, 255, 255, 0.8);
+            border-radius: 50%;
+            pointer-events: none;
+            z-index: 5;
+        }
+    </style>
+</head>
+<body>
+    <!-- Фоновая музыка -->
+    <audio id="backgroundMusic" loop>
+        <source src="audio/The Cat Empire - The Lost Song.mp3" type="audio/mp3">
+        Ваш браузер не поддерживает аудио элемент.
+    </audio>
+    
+    <!-- Звездное небо -->
+    <div class="stars" id="stars"></div>
+    
+    <!-- Кнопка управления музыкой -->
+    <button id="musicToggle" class="music-control">
+        <i class="bi bi-music-note-beamed"></i>
+    </button>
+
+    <div class="container-center">
+        <h1 class="title-text">
+            Нажми на кнопку, чтобы перейти дальше
+        </h1>
+        
+        <!-- Кнопка, которая будет перемещаться -->
+        <button id="magicButton" class="magic-btn" style="background: linear-gradient(135deg, #2196F3 0%, #1976D2 100%);">
+            Тык
+        </button>
+        
+        <div class="hint">
+            Иногда всё не так просто, как кажется...
+        </div>
+    </div>
+
+    <!-- Bootstrap JS + Popper -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            const button = document.getElementById('magicButton');
+            const backgroundMusic = document.getElementById('backgroundMusic');
+            const musicToggle = document.getElementById('musicToggle');
+            const starsContainer = document.getElementById('stars');
+            let clickCount = 0;
+            const maxClicks = 5;
+            
+            // Создаем звездное небо
+            function createStars() {
+                for (let i = 0; i < 100; i++) {
+                    const star = document.createElement('div');
+                    star.className = 'star';
+                    star.style.width = Math.random() * 2 + 1 + 'px';
+                    star.style.height = star.style.width;
+                    star.style.left = Math.random() * 100 + 'vw';
+                    star.style.top = Math.random() * 100 + 'vh';
+                    star.style.opacity = Math.random() * 0.5 + 0.1;
+                    star.style.setProperty('--duration', Math.random() * 3 + 2 + 's');
+                    star.style.setProperty('--delay', Math.random() * 5 + 's');
+                    starsContainer.appendChild(star);
+                }
+            }
+            
+            createStars();
+            
+            // Устанавливаем музыку с 15 секунды
+            backgroundMusic.currentTime = 15;
+            
+            // Управление музыкой
+            let isMusicPlaying = false;
+            musicToggle.addEventListener('click', function() {
+                if (isMusicPlaying) {
+                    backgroundMusic.pause();
+                    musicToggle.innerHTML = '<i class="bi bi-music-note-beamed"></i>';
+                } else {
+                    backgroundMusic.play().catch(e => {
+                        console.log("Автовоспроизведение заблокировано");
+                    });
+                    musicToggle.innerHTML = '<i class="bi bi-pause-fill"></i>';
+                }
+                isMusicPlaying = !isMusicPlaying;
+            });
+            
+            // Цвета для кнопки
+            const colorSchemes = [
+                'linear-gradient(135deg, #2196F3 0%, #1976D2 100%)',
+                'linear-gradient(135deg, #9C27B0 0%, #7B1FA2 100%)',
+                'linear-gradient(135deg, #4CAF50 0%, #388E3C 100%)',
+                'linear-gradient(135deg, #FF9800 0%, #F57C00 100%)',
+                'linear-gradient(135deg, #F44336 0%, #D32F2F 100%)'
+            ];
+            
+            // Фразы для кнопки при каждом нажатии
+            const buttonTexts = [
+                "Тык",
+                "Еще раз",
+                "Попробуй еще",
+                "Почти...",
+                "Урааа"
+            ];
+            
+            // Звуковые эффекты для каждого нажатия
+            const clickSounds = [
+                'https://assets.mixkit.co/sfx/preview/mixkit-select-click-1109.mp3',
+                'https://assets.mixkit.co/sfx/preview/mixkit-plastic-bubble-click-1124.mp3',
+                'https://assets.mixkit.co/sfx/preview/mixkit-game-ball-tap-2073.mp3',
+                'https://assets.mixkit.co/sfx/preview/mixkit-bubble-pop-up-1183.mp3',
+                'https://assets.mixkit.co/sfx/preview/mixkit-winning-chimes-2015.mp3'
+            ];
+            
+            // Простой эффект частиц при клике
+            function createClickParticles(x, y) {
+                const colors = ['#2196F3', '#9C27B0', '#4CAF50', '#FF9800', '#F44336'];
+                
+                for (let i = 0; i < 8; i++) {
+                    const particle = document.createElement('div');
+                    particle.className = 'click-particle';
+                    particle.style.left = x + 'px';
+                    particle.style.top = y + 'px';
+                    particle.style.backgroundColor = colors[Math.floor(Math.random() * colors.length)];
+                    
+                    document.body.appendChild(particle);
+                    
+                    const angle = Math.random() * Math.PI * 2;
+                    const distance = Math.random() * 30 + 20;
+                    const duration = Math.random() * 400 + 300;
+                    
+                    const animation = particle.animate([
+                        { 
+                            transform: 'translate(0, 0) scale(1)', 
+                            opacity: 1 
+                        },
+                        { 
+                            transform: `translate(${Math.cos(angle) * distance}px, ${Math.sin(angle) * distance}px) scale(0)`, 
+                            opacity: 0 
+                        }
+                    ], {
+                        duration: duration,
+                        easing: 'ease-out'
+                    });
+                    
+                    animation.onfinish = () => particle.remove();
+                }
+            }
+            
+            // Функция для перемещения кнопки в случайное место
+            function moveButton() {
+                const windowWidth = window.innerWidth;
+                const windowHeight = window.innerHeight;
+                const buttonWidth = button.offsetWidth;
+                const buttonHeight = button.offsetHeight;
+                
+                // Учитываем отступы от краев
+                const padding = 50;
+                
+                // Генерируем случайные координаты
+                const maxX = windowWidth - buttonWidth - padding;
+                const maxY = windowHeight - buttonHeight - padding;
+                
+                const randomX = Math.max(padding, Math.floor(Math.random() * maxX));
+                const randomY = Math.max(padding, Math.floor(Math.random() * maxY));
+                
+                // Плавное перемещение
+                button.style.transition = 'all 0.8s cubic-bezier(0.68, -0.55, 0.27, 1.55)';
+                button.style.left = `${randomX}px`;
+                button.style.top = `${randomY}px`;
+                
+                // Меняем цвет кнопки
+                const randomColor = colorSchemes[clickCount % colorSchemes.length];
+                button.style.background = randomColor;
+                
+                // Меняем текст кнопки
+                button.textContent = buttonTexts[clickCount];
+                
+                // Добавляем анимацию
+                button.style.transform = 'scale(0.95)';
+                setTimeout(() => {
+                    button.style.transform = 'scale(1)';
+                }, 200);
+                
+                // Увеличиваем кнопку с каждым нажатием
+                const scale = 1 + (clickCount * 0.05);
+                button.style.transform = `scale(${scale})`;
+            }
+            
+            // Обработчик клика по кнопке
+            button.addEventListener('click', function(e) {
+                clickCount++;
+                
+                // Получаем координаты клика для частиц
+                const rect = button.getBoundingClientRect();
+                const clickX = e.clientX;
+                const clickY = e.clientY;
+                
+                // Создаем простые частицы
+                createClickParticles(clickX, clickY);
+                
+                // Включаем музыку при первом клике
+                if (!isMusicPlaying && clickCount === 1) {
+                    backgroundMusic.play();
+                    isMusicPlaying = true;
+                    musicToggle.innerHTML = '<i class="bi bi-pause-fill"></i>';
+                }
+                
+                // Воспроизводим звук для текущего клика
+                const soundIndex = Math.min(clickCount - 1, clickSounds.length - 1);
+                const clickSound = new Audio(clickSounds[soundIndex]);
+                clickSound.volume = 0.3;
+                clickSound.play().catch(e => console.log("Звук заблокирован"));
+                
+                if (clickCount < maxClicks) {
+                    // Перемещаем кнопку
+                    moveButton();
+                    
+                } else {
+                    // После 5 кликов - финальное состояние
+                    button.textContent = 'Урааа';
+                    button.style.background = 'linear-gradient(135deg, #FFD700 0%, #FFA500 100%)';
+                    button.style.fontSize = '2.5rem';
+                    button.style.padding = '30px 60px';
+                    button.classList.add('pulse-gold');
+                    
+                    // Отключаем дальнейшие клики
+                    button.style.pointerEvents = 'none';
+                    
+                    // Убираем переход, чтобы кнопка не двигалась
+                    button.style.transition = 'all 1s ease';
+                    
+                    // Устанавливаем кнопку по центру
+                    const windowWidth = window.innerWidth;
+                    const windowHeight = window.innerHeight;
+                    const buttonWidth = button.offsetWidth;
+                    const buttonHeight = button.offsetHeight;
+                    
+                    button.style.left = `${(windowWidth - buttonWidth) / 2}px`;
+                    button.style.top = `${(windowHeight - buttonHeight) / 2}px`;
+                    
+                    // Создаем больше частиц для финального клика
+                    for (let i = 0; i < 15; i++) {
+                        setTimeout(() => {
+                            createClickParticles(
+                                button.offsetLeft + button.offsetWidth / 2,
+                                button.offsetTop + button.offsetHeight / 2
+                            );
+                        }, i * 100);
+                    }
+                    
+                    // Через 2.5 секунды переходим на вторую страницу
+                    setTimeout(() => {
+                        window.location.href = 'second.html';
+                    }, 2500);
+                }
+            });
+            
+            // Начальная позиция кнопки - по центру
+            setTimeout(() => {
+                const windowWidth = window.innerWidth;
+                const windowHeight = window.innerHeight;
+                const buttonWidth = button.offsetWidth;
+                const buttonHeight = button.offsetHeight;
+                
+                button.style.left = `${(windowWidth - buttonWidth) / 2}px`;
+                button.style.top = `${(windowHeight - buttonHeight) / 2}px`;
+            }, 100);
+        });
+    </script>
+</body>
+</html>

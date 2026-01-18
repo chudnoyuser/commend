@@ -1,0 +1,143 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Вот что я думаю</title>
+    
+    <!-- Bootstrap 5 CSS -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.0/font/bootstrap-icons.css">
+    
+    <style>
+        body {
+            background: linear-gradient(135deg, #e3f2fd 0%, #f3e5f5 100%);
+            min-height: 100vh;
+            padding-top: 10vh;
+        }
+        
+        .secret-card {
+            background: white;
+            border-radius: 20px;
+            box-shadow: 0 15px 35px rgba(0,0,0,0.1);
+            padding: 30px;
+            margin-bottom: 30px;
+            border: none;
+        }
+        
+        .nav-btn {
+            height: 200px;
+            margin: 15px 0;
+            border-radius: 15px;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            transition: all 0.3s ease;
+            border: none;
+            font-size: 1.2rem;
+            font-weight: bold;
+            background-color: #0d6efd; /* Синий цвет Bootstrap primary */
+            color: white;
+        }
+        
+        .nav-btn:hover {
+            transform: translateY(-10px);
+            box-shadow: 0 10px 20px rgba(0,0,0,0.2);
+            background-color: #0b5ed7; /* Более темный синий при наведении */
+            color: white;
+        }
+        
+        .nav-icon {
+            font-size: 3rem;
+            margin-bottom: 15px;
+        }
+        
+        .back-btn {
+            position: fixed;
+            bottom: 20px;
+            right: 20px;
+            border-radius: 50%;
+            width: 60px;
+            height: 60px;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="secret-card text-center">
+            <h1 class="mb-4">
+                Вот что я думаю по поводу этой публикации
+            </h1>
+            
+            <p class="lead mb-5">Выбери одну из кнопок ниже, чтобы увидеть мое восхищение:</p>
+            
+            <div class="row">
+                <!-- Кнопка 1 -->
+                <div class="col-md-6 col-lg-3">
+                    <a href="pages/page1.html" class="btn nav-btn">
+                        <i class="bi bi-image nav-icon"></i>
+                        Мое восхищение по поводу первой фотки
+                    </a>
+                </div>
+                
+                <!-- Кнопка 2 -->
+                <div class="col-md-6 col-lg-3">
+                    <a href="pages/page2.html" class="btn nav-btn">
+                        <i class="bi bi-image nav-icon"></i>
+                        Мое восхищение по поводу второй фотки
+                    </a>
+                </div>
+                
+                <!-- Кнопка 3 -->
+                <div class="col-md-6 col-lg-3">
+                    <a href="pages/page3.html" class="btn nav-btn">
+                        <i class="bi bi-image nav-icon"></i>
+                        Мое восхищение по поводу третьей фотки
+                    </a>
+                </div>
+                
+                <!-- Кнопка 4 -->
+                <div class="col-md-6 col-lg-3">
+                    <a href="pages/page4.html" class="btn nav-btn">
+                        <i class="bi bi-image nav-icon"></i>
+                        Мое восхищение по поводу четвертой фотки
+                    </a>
+                </div>
+            </div>
+            
+            <div class="mt-5">
+                <p class="text-muted">
+                    сюрприз!!
+                </p>
+            </div>
+        </div>
+    </div>
+    
+    <!-- Кнопка возврата -->
+    <a href="index.html" class="btn btn-secondary back-btn" title="Вернуться назад">
+        <i class="bi bi-arrow-left"></i>
+    </a>
+    
+    <!-- Bootstrap JS -->
+    <!-- Bootstrap JS -->
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+
+<script>
+    // Простая интерактивность для специальной кнопки
+    const specialButton = document.getElementById('specialButton');
+    
+    if (specialButton) {
+        specialButton.addEventListener('mouseenter', function() {
+            this.innerHTML = '<i class="bi bi-question-diamond photo-icon"></i> Что-то особенное...';
+            this.style.background = 'linear-gradient(135deg, #FF9800 0%, #F57C00 100%)';
+        });
+        
+        specialButton.addEventListener('mouseleave', function() {
+            this.innerHTML = '<i class="bi bi-stars photo-icon"></i> Мое восхищение по поводу четвертой фотки';
+            this.style.background = 'linear-gradient(135deg, #42A5F5 0%, #2196F3 100%)';
+        });
+    }
+</script>
+</body>
+</html>
